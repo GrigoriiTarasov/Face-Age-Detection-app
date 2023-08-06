@@ -1,0 +1,10 @@
+README.md
+setup.py
+face_extrac2/__init__.py
+face_extrac2.egg-info/PKG-INFO
+face_extrac2.egg-info/SOURCES.txt
+face_extrac2.egg-info/dependency_links.txt
+face_extrac2.egg-info/top_level.txt
+face_extrac2/models/__init__.py
+face_extrac2/models/img_utils.py
+face_extrac2/models/inference.py
