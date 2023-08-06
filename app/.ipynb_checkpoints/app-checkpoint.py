@@ -7,6 +7,7 @@ uvicorn app.main:app --reload --port 8000
 
 
 from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import numpy as np
@@ -42,12 +43,18 @@ async def ping():
 
 # # Core
 
-
+from data_validation import handle_input_file
 
 @app.post("/api/predict_photo")
 async def predict(
     file: UploadFile = File(...)
 ):
+    try:
+        image_np = handle_input_file(file)
+    except Exception as e:
+        return JSONResponse(status_code=400, content={"message": f'Error: {e}'})
+
+    
     #image = read_file_as_image(await file.read())
     #img_batch = np.expand_dims(image, 0)
     #predictions = Predictor.model.predict(img_batch)
@@ -55,9 +62,10 @@ async def predict(
     #predicted_class = CLASS_NAMES[np.argmax(predictions[0])]
     #confidence = np.max(predictions[0])
     
-    outs =  recognition_pipeline(file)
+    #outs =  recognition_pipeline(file)
+    prediction = {}
     
-    return outs
+    return JSONResponse(status_code=200, content={"message": prediction})
 
 
 # In[ ]:
