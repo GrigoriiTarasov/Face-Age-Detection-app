@@ -20,33 +20,20 @@ sys.path.append('../')
 app = FastAPI()
 
 
-# In[ ]:
+
+from src.models.inference import PipelinePredictor
+#from src.models.inference import recognition_pipeline
 
 
-from src.models import load_model
-
-
-# In[ ]:
-
-
-class Predictor:
-    def __init__(self):
-        model = None
-
-
-# In[ ]:
+predictor = PipelinePredictor()
 
 
 @app.on_event('startup')
-def init_data():
+def prepare_pipeline():
     print("Loading model...")
-    Predictor.model = load_model()
+    predictor.load_model()
     print("Loaded succesivly...")
-    return model
-
-
-# In[ ]:
-
+    #return model
 
 @app.get("/ping")
 async def ping():
@@ -55,13 +42,6 @@ async def ping():
 
 # # Core
 
-# In[ ]:
-
-
-from src.models.inference import recognition_pipeline
-
-
-# In[ ]:
 
 
 @app.post("/api/predict_photo")
@@ -109,22 +89,6 @@ async def predict(
 
 if __name__ == "__main__":
     uvicorn.run(app, host='localhost', port=8000)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
 
 
 

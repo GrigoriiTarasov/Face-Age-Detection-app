@@ -14,9 +14,31 @@ def extract_face(img_or_its_path,
                                       enforce_detection=enforce_detection,
                                       target_size=typical_dataset_im_size)
     return face_obj
+
+
+def get_params_of_model(configs_path):
+    pass
+
+class PipelinePredictor:
+    '''Loads weights and archs using yaml
+    default is best
+    '''
+    def __init__(self, 
+                 configs_path = '../'):
+        '''
+        Default configs_path is best_configs_path
+        '''
+        self.model = None
+        self.age_params = get_params_of_model(configs_path)
         
-        
-def esteem_age():
+    def load_model(self):
+        '''
+        '''
+        #self.age_params
+        self.model = None
+    
+    
+def esteem_age(age_model):
     pass
     
 def recognition_pipeline(img_batch):
