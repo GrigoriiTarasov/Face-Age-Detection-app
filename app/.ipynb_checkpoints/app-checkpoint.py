@@ -3,31 +3,45 @@
 __doc__='''
 uvicorn app.main:app --reload --port 8000
 '''
-# In[1]:
-
 
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 import numpy as np
 from io import BytesIO
 from PIL import Image
 import sys
+from typing import List, Dict
+import uvicorn
 
+import output_converter
 
 sys.path.append('../')
+
+from data_validation import handle_input_pic
+from src.models.inference import PipelinePredictor
+
 
 app = FastAPI()
 
 
-
-from src.models.inference import PipelinePredictor
 #from src.models.inference import recognition_pipeline
 
 
 predictor = PipelinePredictor()
+def predict_one_frame(frame->np.array,
+                      predictor->PipelinePredictor)->List[Dict]:
+    extraction_obj, age_preds = predictor.predict_img(frame)
+        
+    prediction = []
+    print(f'extraction_obj {extraction_obj} \n age_preds {age_preds}')
+    for face_obj, age_pred in zip(extraction_obj,
+                                  age_preds):
+        prediction.append({**output_converter.extract_to_dct(face_obj),
+                           **output_converter.age_to_dct(age_pred)})
+    return prediction
 
+# # Web
 
 @app.on_event('startup')
 def prepare_pipeline():
@@ -43,32 +57,19 @@ async def ping():
 
 # # Core
 
-from data_validation import handle_input_file
 
 @app.post("/api/predict_photo")
-async def predict(
-    file: UploadFile = File(...)
-):
+async def predict(file: UploadFile = File(...)):
     try:
-        image_np = handle_input_file(file)
+        image_np = await handle_input_pic(file)
     except Exception as e:
-        return JSONResponse(status_code=400, content={"message": f'Error: {e}'})
-
+        return JSONResponse(status_code=400, 
+                            content={"message": f'Error: {e}'})
     
-    #image = read_file_as_image(await file.read())
-    #img_batch = np.expand_dims(image, 0)
-    #predictions = Predictor.model.predict(img_batch)
-    #print(predictions[0])
-    #predicted_class = CLASS_NAMES[np.argmax(predictions[0])]
-    #confidence = np.max(predictions[0])
+    prediction = predict_one_frame(image_np)
     
-    #outs =  recognition_pipeline(file)
-    prediction = {}
-    
-    return JSONResponse(status_code=200, content={"message": prediction})
-
-
-# In[ ]:
+    return JSONResponse(status_code=200, 
+                        content=prediction)
 
 
 @app.post("/api/predict_video")
@@ -76,24 +77,8 @@ async def predict(
     file: UploadFile = File(...)
 ):
     
-    Predictor.model
-    
-    img_batch = np.expand_dims(image, 0)
-    
-    predictions = Predictor.model.predict(img_batch)
-    
-    
-    #print(predictions[0])
-    #predicted_class = CLASS_NAMES[np.argmax(predictions[0])]
-    #confidence = np.max(predictions[0])
-    return {
-        'class': predicted_class,
-        'confidence': float(confidence)
-    }
 
-
-# In[ ]:
-
+    return None
 
 if __name__ == "__main__":
     uvicorn.run(app, host='localhost', port=8000)

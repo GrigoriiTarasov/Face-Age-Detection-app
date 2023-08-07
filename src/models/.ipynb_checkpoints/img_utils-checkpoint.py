@@ -1,28 +1,38 @@
 '''
 provides preproc_img for Deepface embedding models directly by architecture name only which was tested for [Facenet', 'Facenet512', 'ArcFace', 'VGGFace'] '''
-from deepface.commons.functions import normalize_input
+
+import numpy as np
 from tensorflow.keras.preprocessing.image import load_img
+from tensorflow.keras.preprocessing import image
+from typing import Union
+import sys
+
+
+retincaface_rep_path = r'../../deepface/'
+sys.path.append(retincaface_rep_path)
+
+from deepface.commons.functions import normalize_input
+
+def get_normalizer(architecture_name:str)->str:
+    normilizer_name = architecture_name
+    if architecture_name == 'VGGFace':
+        tf_version = int(tf.__version__.split(".", maxsplit=1)[0])
+        if tf_version==2:
+            normilizer_name+='2'
+    elif architecture_name == 'Facenet512':
+        normilizer_name = 'Facenet'
+
+    return normilizer_name
 
 class PreprocDeepface:
     def __init__(self,
-                 deepface_architecture_name,
-                 target_size):
+                 deepface_architecture_name:str,
+                 target_size:Union[tuple,list]):
         
         self.target_size = target_size       
-        self.deepface_normilizer = get_normilizer(deepface_architecture_name)
+        self.deepface_normilizer = get_normalizer(deepface_architecture_name)
 
-    def get_normilizer(architecture_name):
-        normilizer_name = architecture_name
-        if architecture_name == 'VGGFace':
-            tf_version = int(tf.__version__.split(".", maxsplit=1)[0])
-            if tf_version==2:
-                normilizer_name+='2'
-        elif base_model_name == 'Facenet512':
-            normilizer_name = 'Facenet'
-
-        return lambda x: normalize_input(x, normilizer_name)
-
-    def preproc_img(img):
+    def preproc_img(self, img:'Convirtable to np.array')->np.array:
         '''Wraps deepace normalization with model input restriction and
         img transforms passing extract_face'''
 
@@ -44,7 +54,7 @@ class PreprocDeepface:
 
         return x
 
-    def deprocess_image(vggface_image):
+    def deprocess_image(self, vggface_image):
         """
         VGG only to test if img==preproc_img(img)
         """
@@ -61,8 +71,8 @@ class PreprocDeepface:
 
         return image
 
-    def preproc_by_path(img_path,
-                        target_size):
+    def preproc_by_path(self, img_path:str,
+                        target_size:Union[tuple,list])->np.array:
         '''
         Example:
 
@@ -73,5 +83,5 @@ class PreprocDeepface:
         nn_input_example
         '''
         img = load_img(img_path, target_size=target_size)
-        nn_input_example = preproc_img(img)
+        nn_input_example = self.preproc_img(img)
         return nn_input_example

@@ -1,0 +1,96 @@
+# --------- Def base image
+FROM nvidia/cuda:11.3.0-base-ubuntu18.04
+
+
+# --------- My consts
+ARG ENVIRONMENT_NAME="monai_38"
+# --- GPU
+ENV pytorch_gpu_cmd_install="install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.3 -c pytorch -n ${ENVIRONMENT_NAME} -y"
+
+# all the resources must be copied into the directory where you run the docker build 
+ARG ANACONDA_SOURCE_PATH="Anaconda3-2021.11-Linux-x86_64.sh"
+
+ARG YAML_original_PATH="./env_files/${ENVIRONMENT_NAME}_from-history.yaml"
+# --------- Copy env file to image 
+ENV env_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
+
+#ARG ANACONDA_FILEPATH=Anaconda3-2021.11-Linux-x86_64.sh
+
+ENV ANACONDA_COPIED_NAME=${ANACONDA_SOURCE_PATH} 
+#Anaconda3-2021.11-Linux-x86_64.sh
+ENV ANAC_DOCKER_FILE=/tmp/${ANACONDA_COPIED_NAME}
+
+# Install prerequisites
+RUN apt-get update ; apt-get install -y \
+    curl \
+    ca-certificates \
+    sudo \
+    git \
+    bzip2 \
+    libx11-6 \
+ && rm -rf /var/lib/apt/lists/*
+
+# https://github.com/NVIDIA/nvidia-docker/issues/1632#issuecomment-1112667716
+RUN rm /etc/apt/sources.list.d/cuda.list
+#RUN rm /etc/apt/sources.list.d/nvidia-ml.list
+
+# for cv2 pre's docker exclusive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libgl1 \
+        libglib2.0-0
+# X RUN pip3 install opencv-python-headless==4.5.3.56        
+# X RUN apt install -y libgl1-mesa-glx
+# X RUN apt-get install libgl1
+# https://stackoverflow.com/a/70509199/7607734
+
+# --------- Install conda to image
+
+
+
+
+# ----------Copy from sysytem to container
+
+ADD ${YAML_original_PATH} /src/environment.yaml
+
+
+# --------- Load and install conda
+
+ENV CONDA_PATH=/opt/conda/
+# Better to store on local PC and just add, possibly it will be cached and faster to rebuild
+#RUN cd /tmp && curl -O https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh
+ADD ${ANACONDA_SOURCE_PATH} ${ANAC_DOCKER_FILE}
+RUN chmod +x ${ANAC_DOCKER_FILE}
+RUN mkdir /root/.conda
+RUN bash -c "${ANAC_DOCKER_FILE} -b -p ${CONDA_PATH}"
+
+
+
+# Initializes Conda for bash shell interaction.
+RUN ${CONDA_PATH}/bin/conda init bash
+
+
+# --------- USE ENV 
+RUN export PATH="/opt/conda/envs/${ENVIRONMENT_NAME}/bin:$PATH"
+
+#RUN ${CONDA_PATH}/bin/conda update -n base -c defaults conda
+RUN ${CONDA_PATH}/bin/conda install -n base -c conda-forge mamba
+RUN ${CONDA_PATH}/bin/mamba env create -f /src/environment.yaml
+
+# -y  # unrecognised command
+
+## X RUN /bin/bash -c "source activate py3_7x_keras" # - don't work
+
+RUN echo conda activate ${ENVIRONMENT_NAME} >> /root/.bashrc
+RUN ${CONDA_PATH}/bin/mamba ${pytorch_gpu_cmd_install}
+
+
+# --------- If docker execution only: program execution
+#ENV PY_FOLDER="${CONDA_BIN}/python"
+#RUN echo "$PY_FOLDER" >> /home/py_path.txt
+#ENTRYPOINT $(cat /home/py_path.txt) /home/train_it.py
+
+
+RUN rm -rf /tmp/*
+
+
+

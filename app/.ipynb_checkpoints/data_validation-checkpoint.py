@@ -14,7 +14,7 @@ async def read_imagefile(file) -> np.ndarray:
     except error as e:
         raise  e
 
-def handle_input_file(file):
+async def handle_input_file(file):
     suitable_extensions = ("jpg", "jpeg", "png")
     recieved_extenion = file.filename.split(".")[-1]
     
@@ -23,7 +23,7 @@ def handle_input_file(file):
          raise Exception(f'Wrong file extension: {recieved_extenion}. Please convert to any of {suitable_extensions}') 
     
     else:
-        return read_imagefile(file)
+        return await read_imagefile(file)
     
 
 
