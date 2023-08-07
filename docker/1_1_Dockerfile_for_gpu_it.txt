@@ -3,9 +3,9 @@ FROM nvidia/cuda:11.3.0-base-ubuntu18.04
 
 
 # --------- My consts
-ARG ENVIRONMENT_NAME="monai_38"
+ARG ENVIRONMENT_NAME="face_detection_age"
 # --- GPU
-ENV pytorch_gpu_cmd_install="install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.3 -c pytorch -n ${ENVIRONMENT_NAME} -y"
+#ENV pytorch_gpu_cmd_install="install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.3 -c pytorch -n ${ENVIRONMENT_NAME} -y"
 
 # all the resources must be copied into the directory where you run the docker build 
 ARG ANACONDA_SOURCE_PATH="Anaconda3-2021.11-Linux-x86_64.sh"
@@ -64,7 +64,6 @@ RUN mkdir /root/.conda
 RUN bash -c "${ANAC_DOCKER_FILE} -b -p ${CONDA_PATH}"
 
 
-
 # Initializes Conda for bash shell interaction.
 RUN ${CONDA_PATH}/bin/conda init bash
 
@@ -72,13 +71,9 @@ RUN ${CONDA_PATH}/bin/conda init bash
 # --------- USE ENV 
 RUN export PATH="/opt/conda/envs/${ENVIRONMENT_NAME}/bin:$PATH"
 
-#RUN ${CONDA_PATH}/bin/conda update -n base -c defaults conda
 RUN ${CONDA_PATH}/bin/conda install -n base -c conda-forge mamba
 RUN ${CONDA_PATH}/bin/mamba env create -f /src/environment.yaml
 
-# -y  # unrecognised command
-
-## X RUN /bin/bash -c "source activate py3_7x_keras" # - don't work
 
 RUN echo conda activate ${ENVIRONMENT_NAME} >> /root/.bashrc
 RUN ${CONDA_PATH}/bin/mamba ${pytorch_gpu_cmd_install}

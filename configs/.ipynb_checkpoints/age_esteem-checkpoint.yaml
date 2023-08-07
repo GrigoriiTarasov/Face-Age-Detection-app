@@ -1,0 +1,3 @@
+age_best_model_path : '../weights/Facenet_121_age_checkpoint_best.h5'
+age_preproc_family : 'Facenet'
+target_size : [160, 160]

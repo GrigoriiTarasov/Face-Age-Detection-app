@@ -1,2 +1,2 @@
-device: 'GPU'
-batch_size : 4
+device_type: 'GPU'
+gpu_gb_limit : 4
