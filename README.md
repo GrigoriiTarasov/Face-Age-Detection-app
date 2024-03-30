@@ -34,31 +34,30 @@ cd ./home/app; uvicorn app:app --reload --port 2020 --host 0.0.0.0
 
 Стандартна
 
-├── app <- FastAPI
-├── configs <- Все настройки для моделей и инфинренса
-├── data <- Для данных
-├── deepface
-│   ├── api
-│   ├── deepface
-│   │   ├── basemodels
-│   │   ├── commons
-│   │   ├── detectors
-│   │   ├── extendedmodels
-│   │   ├── models
-│   ├── deepface.egg-info
-│   ├── icon
-│   ├── scripts
-│   └── tests
-│       └── dataset
-├── docker
-├── env 
-├── references
-├── reports <- Основаное описание исследования в Метрики_и_задачи.docx
-│   └── figures
-├── research <- Скрипты обучения и оценки метрик 
-│   └── evaluation_data
-├── src
-│   └── models
-└── weights <- Веса моделей маш. обуч.
-
+├── app <- FastAPI  
+├── configs <- Все настройки для моделей и инфинренса  
+├── data <- Для данных  
+├── deepface  
+│   ├── api  
+│   ├── deepface  
+│   │   ├── basemodels  
+│   │   ├── commons  
+│   │   ├── detectors  
+│   │   ├── extendedmodels  
+│   │   ├── models  
+│   ├── deepface.egg-info  
+│   ├── icon  
+│   ├── scripts  
+│   └── tests  
+│       └── dataset  
+├── docker  
+├── env  
+├── references  
+├── reports <- Основаное описание исследования в Метрики_и_задачи.docx  
+│   └── figures  
+├── research <- Скрипты обучения и оценки метрик  
+│   └── evaluation_data  
+├── src  
+│   └── models  
+└── weights <- Веса моделей маш. обуч.  
 
