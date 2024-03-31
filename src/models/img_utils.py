@@ -1,5 +1,5 @@
-'''
-provides preproc_img for Deepface embedding models directly by architecture name only which was tested for [Facenet', 'Facenet512', 'ArcFace', 'VGGFace'] '''
+"""
+provides preproc_img for Deepface embedding models directly by architecture name only which was tested for [Facenet', 'Facenet512', 'ArcFace', 'VGGFace'] """
 
 import numpy as np
 from tensorflow.keras.preprocessing.image import load_img
@@ -8,49 +8,50 @@ from typing import Union
 import sys
 
 
-retincaface_rep_path = r'../../deepface/'
+retincaface_rep_path = r"../../deepface/"
 sys.path.append(retincaface_rep_path)
 
 from deepface.commons.functions import normalize_input
 
-def get_normalizer(architecture_name:str)->str:
+
+def get_normalizer(architecture_name: str) -> str:
     normilizer_name = architecture_name
-    if architecture_name == 'VGGFace':
+    if architecture_name == "VGGFace":
         tf_version = int(tf.__version__.split(".", maxsplit=1)[0])
-        if tf_version==2:
-            normilizer_name+='2'
-    elif architecture_name == 'Facenet512':
-        normilizer_name = 'Facenet'
+        if tf_version == 2:
+            normilizer_name += "2"
+    elif architecture_name == "Facenet512":
+        normilizer_name = "Facenet"
 
     return normilizer_name
 
+
 class PreprocDeepface:
-    def __init__(self,
-                 deepface_architecture_name:str,
-                 target_size:Union[tuple,list]):
-        
-        self.target_size = target_size       
+    def __init__(
+        self, deepface_architecture_name: str, target_size: Union[tuple, list]
+    ):
+
+        self.target_size = target_size
         self.deepface_normilizer = get_normalizer(deepface_architecture_name)
 
-    def preproc_img(self, img:'Convirtable to np.array')->np.array:
-        '''Wraps deepace normalization with model input restriction and
-        img transforms passing extract_face'''
+    def preproc_img(self, img: "Convirtable to np.array") -> np.array:
+        """Wraps deepace normalization with model input restriction and
+        img transforms passing extract_face"""
 
         img = image.array_to_img(img)
 
         img = img.resize(self.target_size)
         x = image.img_to_array(img)
-        #print('loaded ',x)
+        # print('loaded ',x)
 
-        x = x[..., ::-1] # 
-        x = np.expand_dims(x, axis=0) # to batch
+        x = x[..., ::-1]  #
+        x = np.expand_dims(x, axis=0)  # to batch
 
-        #x = x.astype('float32')
-        x = x/255 # deepface especific
-        x = normalize_input(x, 
-                            normalization=self.deepface_normilizer)
+        # x = x.astype('float32')
+        x = x / 255  # deepface especific
+        x = normalize_input(x, normalization=self.deepface_normilizer)
 
-        #print('normilized ',x)
+        # print('normilized ',x)
 
         return x
 
@@ -66,14 +67,14 @@ class PreprocDeepface:
         x_temp[..., 0] += 91.4953
         x_temp = x_temp[..., ::-1]
 
-
         image = x_temp.astype(np.uint8)
 
         return image
 
-    def preproc_by_path(self, img_path:str,
-                        target_size:Union[tuple,list])->np.array:
-        '''
+    def preproc_by_path(
+        self, img_path: str, target_size: Union[tuple, list]
+    ) -> np.array:
+        """
         Example:
 
         img_name= '81_1_0_20170120134927295.jpg.chip.jpg'
@@ -81,7 +82,7 @@ class PreprocDeepface:
         img = load_img(img_path, target_size=TARGET_SIZE)
         nn_input_example = preproc_img(img)
         nn_input_example
-        '''
+        """
         img = load_img(img_path, target_size=target_size)
         nn_input_example = self.preproc_img(img)
         return nn_input_example
