@@ -1,0 +1,10 @@
+stages:
+  - black-check
+
+black_check:
+  stage: black-check
+  script:
+    - black --check .
+  only:
+    - main
+  allow_failure: false
