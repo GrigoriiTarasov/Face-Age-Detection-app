@@ -1,0 +1,10 @@
+stages:
+  - black-check
+
+black_check:
+  image: python:3.11
+  stage: black-check
+  script:
+    - pip install black
+    - black --check .
+  allow_failure: false
