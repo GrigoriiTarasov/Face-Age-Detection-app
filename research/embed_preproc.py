@@ -5,7 +5,7 @@ def img_to_input(path, target_size=(224, 224)):
     # x = utils.preprocess_input(x, version=2)
     x = normalize_input(x, normalization="VGGFace")
 
-    return x
+    return xa
 
 
 def img_to_input(paths, target_size=(224, 224)):

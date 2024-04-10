@@ -14,33 +14,23 @@ import sys
 from typing import List, Dict
 import uvicorn
 
-import output_converter
-
 sys.path.append("../")
 
-from data_validation import handle_input_pic, handle_input_video
-from src.models.inference import PipelinePredictor
+from age_module.app.data_validation import handle_input_pic, handle_input_video
+from age_module.src.models.inference import PipelinePredictor
+from age_module.app.output_converter import AdaptPredAPI
+
 
 app = FastAPI()
-
 predictor = PipelinePredictor()
 
+def predict_one_frame(frame: np.array, 
+                      predictor: PipelinePredictor) -> List[Dict]:
 
-def predict_one_frame(frame: np.array, predictor: PipelinePredictor) -> List[Dict]:
-    extraction_obj, age_preds = predictor.predict_img(frame)
+    preds = predictor.predict_img(frame)
+    client_output = [AdaptPredAPI(*pred).client_output() for pred in preds]
 
-    prediction = []
-
-    for face_obj, age_pred in zip(extraction_obj, age_preds):
-        prediction.append(
-            {
-                **output_converter.extract_to_dct(face_obj),
-                **output_converter.age_to_dct(age_pred),
-            }
-        )
-
-    # print(prediction)
-    return prediction
+    return client_output
 
 
 # # Web
