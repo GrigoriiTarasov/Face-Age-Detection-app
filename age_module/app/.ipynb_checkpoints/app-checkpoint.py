@@ -24,8 +24,8 @@ from age_module.app.output_converter import AdaptPredAPI
 app = FastAPI()
 predictor = PipelinePredictor()
 
-def predict_one_frame(frame: np.array, 
-                      predictor: PipelinePredictor) -> List[Dict]:
+
+def predict_one_frame(frame: np.array, predictor: PipelinePredictor) -> List[Dict]:
 
     preds = predictor.predict_img(frame)
     client_output = [AdaptPredAPI(*pred).client_output() for pred in preds]

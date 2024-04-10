@@ -24,7 +24,7 @@ dependencies:
   - scikit-learn
   - python-multipart
   - pip
-  - deepface
+  - pre-commit
 pip:
   - ./dependencies/deepface-50105b21e6bd2c5d490483558b78a92701539752.zip
   

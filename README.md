@@ -16,7 +16,8 @@
 1) Сделать образ
 
 ```cd docker;
-docker build -f Dockerfile -t local/nvidia_conda:face_detection_age .```
+docker build -f Dockerfile -t local/nvidia_conda:face_detection_age .
+```
 
 cd docker;
 docker build -f Dockerfile -t local/nvidia_conda:face_detection_age .
@@ -28,11 +29,13 @@ docker build -f Dockerfile -t local/nvidia_conda:face_detection_age .
 docker run --gpus all --rm -it  \
 -v $cur_folder:/home \
 -p 8000:2020 \
-local/nvidia_conda:face_detection_age```
+local/nvidia_conda:face_detection_age
+```
 
 3) Стартовать FastAPI
 
-```cd ./home/app; uvicorn app:app --reload --port 2020 --host 0.0.0.0```
+```cd ./home/app; uvicorn app:app --reload --port 2020 --host 0.0.0.0
+```
 
 
 Готово.
