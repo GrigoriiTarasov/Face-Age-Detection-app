@@ -7,13 +7,32 @@
 
 # Age esteemation & Face Detection
 
-## Описание
+## 1 Description
+### 1.1 Aim
+The aim of the project is to provide service runed in Docker with API FastAPI interface which predicts age with custom finetuned neural-network model over the existent fine face extractor.
 
-Сервис на FasatAPI с возможностью развёртывания в докер реализующий API извлечения лиц из картинок и видео и оценки их возраста. Класс с пайпланом такого распознавания с имплементацией обёртки над моделями из deepface и скрипты оценок кастомных моделей над несколькими представленными датасетами (UTKFace_Dataset, FDDB)
+### 1.2 Specifications
 
-## Service module execution
+Date of creation: 7 September 2023
 
-1) Сделать образ
+#### App:
+Docs API: Swagger
+UI: not ment
+
+#### ML models and frameroks
+Extraction framework: Deepface
+Selected extraction backend: mtcnn
+
+Age dataset: UTKFace_Dataset cropped
+Age backbone: Facenet
+
+Сервис на FasatAPI с возможностью развёртывания в докер реализующий API извлечения лиц из картинок и видео и оценки их возраста. Класс с пайпланом такого распознавания с имплементацией обёртки над моделями из deepface и скрипты оценок кастомных моделей над несколькими представленными датасетами (, FDDB)
+
+## 2. Instructions
+
+### 2.1 App start
+
+1) Create docker image
 
 ```cd docker;
 docker build -f Dockerfile -t local/nvidia_conda:face_detection_age .
@@ -23,7 +42,9 @@ cd docker;
 docker build -f Dockerfile -t local/nvidia_conda:face_detection_age .
 
 
-2) Запустить из папки проекта с нужным кол-вом видеокарт в интерактивном режиме
+2) Run from the project folder with desired GPU amount in interactive mode
+
+  Запустить из папки проекта с нужным кол-вом видеокарт в интерактивном режиме
 
 ```cur_folder=$(realpath ../);
 docker run --gpus all --rm -it  \
@@ -36,18 +57,13 @@ local/nvidia_conda:face_detection_age
 
 ```cd ./home/app; uvicorn app:app --reload --port 2020 --host 0.0.0.0
 ```
-
-
 Готово.
 
-Доступен Swagger UI:
-для примера по адресу 
+Swagger UI is available for above settings:
 [http://127.0.0.1:8000/docs#/](http://127.0.0.1:8000/docs#/)
 
-## Reproducing and fine tuning on custom
-
-Age training was done on UTKFace_Dataset
-which is obtained from [https://susanqq.github.io/UTKFace/](https://susanqq.github.io/UTKFace/)
+## 2.2 Reproducing and fine tuning on custom datasets
+ 
+Age training was data can be obtained from [https://susanqq.github.io/UTKFace/](https://susanqq.github.io/UTKFace/)
 to make example scripts work replace data link with 
-ln -s <path to UTK cropped folder> data
-
+ln -s <path to UTK cropped folder> data.
