@@ -13,9 +13,11 @@ import age_module.src.models.img_utils as img_utils
 
 
 # fix for pytest to work
-age_module_dir = os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir, os.pardir)))
+age_module_dir = os.path.dirname(
+    os.path.abspath(os.path.join(__file__, os.pardir, os.pardir))
+)
 sys.path.append(age_module_dir)
-configs_rel_path = os.path.join(age_module_dir, '../configs')
+configs_rel_path = os.path.join(age_module_dir, "../configs")
 
 # Constants
 INFER_CONFIG_PATH = f"{configs_rel_path}/infer.yaml"
@@ -46,7 +48,7 @@ tf_mem.limit_gpu_gb(gpu_gb_limit)
 
 
 def extract_face(
-    img_or_its_path:  Union[Type[np.ndarray], str],
+    img_or_its_path: Union[Type[np.ndarray], str],
     enforce_detection: bool,
     typical_dataset_im_size: tuple = typical_dataset_im_size,
     detector_backend: str = best_detection_backend,
@@ -64,7 +66,7 @@ def extract_face(
         List[Dict]: List of face objects.
     """
     face_obj = DeepFace.extract_faces(
-        img_or_its_path, 
+        img_or_its_path,
         detector_backend=detector_backend,
         grayscale=False,
         align=False,
@@ -118,28 +120,26 @@ def age_postprocess(age_pred: Union[Type[np.ndarray], float, list]) -> int:
 
 
 def recognition_pipeline(
-    img_batch: np.array, 
-    age_model: tf.keras.Model, 
-    age_preproc: img_utils.PreprocDeepface, 
-    age_raw: bool = False
+    img_batch: np.array,
+    age_model: tf.keras.Model,
+    age_preproc: img_utils.PreprocDeepface,
+    age_raw: bool = False,
 ):
-    '''Extracts face from image and gets age prediction over it'''
+    """Extracts face from image and gets age prediction over it"""
 
     img_or_its_path = img_batch
     extraction_obj = extract_face(
         img_or_its_path,
-        enforce_detection = False,
-        typical_dataset_im_size = typical_dataset_im_size,
-        detector_backend = best_detection_backend,
+        enforce_detection=False,
+        typical_dataset_im_size=typical_dataset_im_size,
+        detector_backend=best_detection_backend,
     )
 
     age_preds = []
     for face_obj in extraction_obj:
 
-        age_pred = esteem_age(
-            face_obj["face"], age_model, age_preproc
-        )  
-        
+        age_pred = esteem_age(face_obj["face"], age_model, age_preproc)
+
         if not age_raw:
             age_pred = age_postprocess(age_pred)
 

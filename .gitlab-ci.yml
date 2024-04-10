@@ -2,7 +2,7 @@ stages:
   - black-check
 
 black_check:
-  image: python:3.11
+  image: python:3.8
   stage: black-check
   script:
     - pip install black

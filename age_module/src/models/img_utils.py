@@ -10,6 +10,7 @@ from typing import Union
 
 from deepface.commons.functions import normalize_input
 
+
 def get_normalizer(architecture_name: str) -> str:
     normilizer_name = architecture_name
     if architecture_name == "VGGFace":
@@ -24,15 +25,13 @@ def get_normalizer(architecture_name: str) -> str:
 
 class PreprocDeepface:
     def __init__(
-        self, deepface_architecture_name: str, 
-        target_size: Union[tuple, list]
+        self, deepface_architecture_name: str, target_size: Union[tuple, list]
     ):
 
         self.target_size = target_size
         self.deepface_normilizer = get_normalizer(deepface_architecture_name)
 
-    def preproc_img(self, 
-                    img: "Convirtable to np.array") -> np.array:
+    def preproc_img(self, img: "Convirtable to np.array") -> np.array:
         """Wraps deepace normalization with model input restriction and
         img transforms passing extract_face"""
 
@@ -41,12 +40,11 @@ class PreprocDeepface:
         img = img.resize(self.target_size)
         x = image.img_to_array(img)
 
-        x = x[..., ::-1]  
+        x = x[..., ::-1]
         x = np.expand_dims(x, axis=0)  # to batch
 
         x = x / 255  # deepface specific
         x = normalize_input(x, normalization=self.deepface_normilizer)
-
 
         return x
 
@@ -78,6 +76,6 @@ class PreprocDeepface:
         nn_input_example = preproc_img(img)
         nn_input_example
         """
-        img = load_img(img_path, target_size = target_size)
+        img = load_img(img_path, target_size=target_size)
         nn_input_example = self.preproc_img(img)
         return nn_input_example
