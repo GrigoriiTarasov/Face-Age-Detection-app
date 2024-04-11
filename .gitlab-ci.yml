@@ -1,10 +1,23 @@
 stages:
-  - black-check
+  - test
 
-black_check:
-  image: python:3.8
-  stage: black-check
-  script:
-    - pip install black
-    - black --check .
-  allow_failure: false
+jobs:
+  lint:
+    stage: test
+    image: python:3.8  # Assuming same image for both jobs
+    script:
+      - pip install black
+      - black --check .  
+    allow_failure: false 
+
+  testcov:
+    stage: test
+    image: python:3.8
+    script:
+      - pip install pytest pytest-cov
+      - pytest --cov . --cov-report xml 
+    after_success:
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} 
