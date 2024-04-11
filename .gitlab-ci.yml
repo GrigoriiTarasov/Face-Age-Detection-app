@@ -1,21 +1,16 @@
-stages:
-  - test
+lint:
+  image: python:3.8  # Assuming same image for both jobs
+  script:
+    - pip install black
+    - black --check .  
+  allow_failure: false 
 
-jobs:
-  lint:
-    stage: test
-    image: python:3.8  # Assuming same image for both jobs
-    script:
-      - pip install black
-      - black --check .  
-    allow_failure: false 
+testcov:
+  image: python:3.8
+  script:
+    - pip install pytest pytest-cov
+    - pytest --cov api/
+    - curl -Os https://cli.codecov.io/latest/linux/codecov
+    - chmod +x codecov
+    - ./codecov upload-process -t $CODECOV_TOKEN
 
-  testcov:
-    stage: test
-    image: python:3.8
-    script:
-      - pip install pytest pytest-cov
-      - pytest --cov api/
-      - curl -Os https://cli.codecov.io/latest/linux/codecov
-      - chmod +x codecov
-      - ./codecov upload-process -t $CODECOV_TOKEN
