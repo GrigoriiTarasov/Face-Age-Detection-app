@@ -11,6 +11,7 @@ env_create:
     - export PATH="$HOME/miniconda/bin:$PATH"
 # (Re)create the environment.yml file for the repository.
     - conda env create -q -f ./env/face_detection_age_from-history.yaml -n checkstyle-for-bash --force
+    - conda init
   script:
     - conda activate checkstyle-for-bash
 
