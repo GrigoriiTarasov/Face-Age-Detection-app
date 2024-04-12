@@ -12,7 +12,7 @@ env_create:
 # (Re)create the environment.yml file for the repository.
     - conda env create -q -f ./env/face_detection_age_from-history.yaml -n checkstyle-for-bash --force
   script:
-    - source activate checkstyle-for-bash
+    - conda activate checkstyle-for-bash
 
 lint:
   stage: test
@@ -28,7 +28,7 @@ testcov:
   image: python:3.8
   before_script:
     - export PATH="$HOME/miniconda/bin:$PATH"
-    - source activate checkstyle-for-bash
+    - conda activate checkstyle-for-bash
     
     - pip install pytest pytest-cov
   script:
