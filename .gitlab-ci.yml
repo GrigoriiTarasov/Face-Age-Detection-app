@@ -1,21 +1,5 @@
 stages:
-  - build
   - test
-  
-env_create:
-  stage: build  
-  image: python:3.8
-  before_script:
-    - wget -q https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; bash miniconda.sh -b -f -p $HOME/miniconda;
-# Ensure the (mini) conda environment can be activated.
-    - export PATH="$HOME/miniconda/bin:$PATH"
-# (Re)create the environment.yml file for the repository.
-    - conda env create -q -f ./env/face_detection_age_from-history.yaml -n myenv --force
-    - conda init bash
-    - source ~/.bashrc
-    - conda activate myenv 
-  script:
-    - conda activate myenv
 
 lint:
   stage: test
@@ -28,9 +12,9 @@ lint:
 
 testcov:
   stage: test
-  image: python:3.8
+  image: continuumio/miniconda3
   before_script:
-    - export PATH="$HOME/miniconda/bin:$PATH"
+    - conda env create -q -f ./env/face_detection_age_from-history.yaml -n myenv --force
     - conda init bash
     - source ~/.bashrc
     - conda activate myenv
