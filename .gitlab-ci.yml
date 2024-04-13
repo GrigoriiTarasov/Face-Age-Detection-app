@@ -21,7 +21,6 @@ testcov:
     - export PATH="$HOME/miniconda/bin:$PATH"
 # (Re)create the environment.yml file for the repository.
     - conda env create -q -f ./env/face_detection_age_from-history.yaml -n myenv --force
-    - apt-get update && apt-get install libgl1
     - conda init bash
     - source ~/.bashrc
     - conda activate myenv
