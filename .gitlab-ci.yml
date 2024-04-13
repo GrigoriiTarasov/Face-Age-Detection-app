@@ -24,9 +24,15 @@ testcov:
     - conda init bash
     - source ~/.bashrc
     - conda activate myenv
+    # install pytest, pytest-cov     
     - pip install pytest pytest-cov
   script:
-    - pytest --cov api/
+    # run pytest-cov
+    pytest . --cov --disable-pytest-warnings
+    ## Download codecov
+    # https://docs.codecov.com/docs/codecov-uploader#download-as-a-binary
     - curl -Os https://cli.codecov.io/latest/linux/codecov
+    # Install codecov
     - chmod +x codecov
+    # Upload to site
     - ./codecov upload-process -t $CODECOV_TOKEN
