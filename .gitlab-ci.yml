@@ -1,10 +1,38 @@
 stages:
-  - black-check
+  - test
 
-black_check:
-  stage: black-check
+lint:
+  stage: test
+  image: python:3.8
+  before_script:
+    - pip install black
   script:
     - black --check .
-  only:
-    - main
-  allow_failure: false
+  allow_failure: false 
+
+testcov:
+  stage: test
+  image: python:3.8
+  before_script:
+    # cv2 fix
+    - apt-get update && apt-get install -y libgl1 
+    - wget -q https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; bash miniconda.sh -b -f -p $HOME/miniconda;
+# Ensure the (mini) conda environment can be activated.
+    - export PATH="$HOME/miniconda/bin:$PATH"
+# (Re)create the environment.yml file for the repository.
+    - conda env create -q -f ./env/face_detection_age_from-history.yaml -n myenv --force
+    - conda init bash
+    - source ~/.bashrc
+    - conda activate myenv
+    # install pytest, pytest-cov     
+    - pip install pytest pytest-cov
+  script:
+    # run pytest-cov
+    - pytest . --cov --disable-pytest-warnings
+    ## Download codecov
+    # https://docs.codecov.com/docs/codecov-uploader#download-as-a-binary
+    - curl -Os https://cli.codecov.io/latest/linux/codecov
+    # Install codecov
+    - chmod +x codecov
+    # Upload to site
+    - ./codecov upload-process -t $CODECOV_TOKEN
