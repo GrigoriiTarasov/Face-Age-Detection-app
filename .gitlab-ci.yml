@@ -28,7 +28,7 @@ testcov:
     - pip install pytest pytest-cov
   script:
     # run pytest-cov
-    pytest . --cov --disable-pytest-warnings
+    - pytest . --cov --disable-pytest-warnings
     ## Download codecov
     # https://docs.codecov.com/docs/codecov-uploader#download-as-a-binary
     - curl -Os https://cli.codecov.io/latest/linux/codecov
