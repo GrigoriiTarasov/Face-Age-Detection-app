@@ -1,20 +1,18 @@
 """
-provides preproc_img for Deepface embedding models directly by architecture name only which was tested for [Facenet', 'Facenet512', 'ArcFace', 'VGGFace'] """
+provides preproc_img for Deepface embedding models directly by architecture name. Was tested for [Facenet', 'Facenet512', 'ArcFace', 'VGGFace'] """
 
 import numpy as np
+import tensorflow as tf
 from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.preprocessing import image
 from typing import Union
-import sys
-
-
-retincaface_rep_path = r"../../deepface/"
-sys.path.append(retincaface_rep_path)
 
 from deepface.commons.functions import normalize_input
 
 
 def get_normalizer(architecture_name: str) -> str:
+    """deepface has different normilizer_name for different tf
+    but we want to run with appropriate by architecture_name"""
     normilizer_name = architecture_name
     if architecture_name == "VGGFace":
         tf_version = int(tf.__version__.split(".", maxsplit=1)[0])
@@ -27,6 +25,8 @@ def get_normalizer(architecture_name: str) -> str:
 
 
 class PreprocDeepface:
+    """Encapsulate all steps prior to model"""
+
     def __init__(
         self, deepface_architecture_name: str, target_size: Union[tuple, list]
     ):
@@ -42,16 +42,12 @@ class PreprocDeepface:
 
         img = img.resize(self.target_size)
         x = image.img_to_array(img)
-        # print('loaded ',x)
 
-        x = x[..., ::-1]  #
+        x = x[..., ::-1]
         x = np.expand_dims(x, axis=0)  # to batch
 
-        # x = x.astype('float32')
-        x = x / 255  # deepface especific
+        x = x / 255  # deepface specific
         x = normalize_input(x, normalization=self.deepface_normilizer)
-
-        # print('normilized ',x)
 
         return x
 
@@ -79,7 +75,7 @@ class PreprocDeepface:
 
         img_name= '81_1_0_20170120134927295.jpg.chip.jpg'
         img_path = f'{abs_img_folder}/{img_name}'
-        img = load_img(img_path, target_size=TARGET_SIZE)
+        img = load_img(img_path, target_size = TARGET_SIZE)
         nn_input_example = preproc_img(img)
         nn_input_example
         """

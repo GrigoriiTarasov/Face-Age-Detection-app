@@ -1,31 +1,41 @@
 import numpy as np
+import os
 import sys
 from tensorflow.keras.models import load_model
 import tensorflow as tf
 from typing import List, Dict, Union, Type
 import yaml
 
-sys.path.append("../deepface/")
 from deepface import DeepFace
 
-sys.path.append("../")
-from src.models import tf_mem
-import src.models.img_utils as img_utils
+from age_module.src.models import tf_mem
+import age_module.src.models.img_utils as img_utils
 
 
-########## load actual models configs
+# fix for pytest to work
+age_module_dir = os.path.dirname(
+    os.path.abspath(os.path.join(__file__, os.pardir, os.pardir))
+)
+sys.path.append(age_module_dir)
+configs_rel_path = os.path.join(age_module_dir, "../configs")
 
-with open("../configs/infer.yaml") as f:
+# Constants
+INFER_CONFIG_PATH = f"{configs_rel_path}/infer.yaml"
+DETECTION_CONFIG_PATH = f"{configs_rel_path}/detection.yaml"
+AGE_ESTIMATION_CONFIG_PATH = f"{configs_rel_path}/age_esteem.yaml"
+
+# Load confiurations
+with open(INFER_CONFIG_PATH) as f:
     infer_dct = yaml.safe_load(f)
 device_type = infer_dct["device_type"]
 gpu_gb_limit = infer_dct["gpu_gb_limit"]
 
-with open("../configs/detection.yaml") as f:
+with open(DETECTION_CONFIG_PATH) as f:
     detection_dct = yaml.safe_load(f)
 best_detection_backend = detection_dct["best_detection_backend"]
 typical_dataset_im_size = detection_dct["typical_dataset_im_size"]
 
-with open("../configs/age_esteem.yaml") as f:
+with open(AGE_ESTIMATION_CONFIG_PATH) as f:
     age_esteem_dct = yaml.safe_load(f)
 age_best_model_path = age_esteem_dct["age_best_model_path"]
 age_preproc_family = age_esteem_dct["age_preproc_family"]
@@ -38,14 +48,25 @@ tf_mem.limit_gpu_gb(gpu_gb_limit)
 
 
 def extract_face(
-    img_or_its_path,
+    img_or_its_path: Union[Type[np.ndarray], str],
     enforce_detection: bool,
     typical_dataset_im_size: tuple = typical_dataset_im_size,
     detector_backend: str = best_detection_backend,
 ) -> List[Dict]:
+    """
+    Extracts faces from an image.
 
+    Args:
+        img_or_its_path (Union[str, np.ndarray]): Image path or numpy array.
+        enforce_detection (bool): Whether to enforce face detection.
+        typical_dataset_im_size (tuple, optional): Typical dataset image size.
+        detector_backend (str, optional): Face detection backend.
+
+    Returns:
+        List[Dict]: List of face objects.
+    """
     face_obj = DeepFace.extract_faces(
-        img_or_its_path,  # img_path,
+        img_or_its_path,
         detector_backend=detector_backend,
         grayscale=False,
         align=False,
@@ -99,8 +120,12 @@ def age_postprocess(age_pred: Union[Type[np.ndarray], float, list]) -> int:
 
 
 def recognition_pipeline(
-    img_batch: np.array, age_model: tf.keras.Model, age_preproc, age_raw=False
+    img_batch: np.array,
+    age_model: tf.keras.Model,
+    age_preproc: img_utils.PreprocDeepface,
+    age_raw: bool = False,
 ):
+    """Extracts face from image and gets age prediction over it"""
 
     img_or_its_path = img_batch
     extraction_obj = extract_face(
@@ -113,9 +138,8 @@ def recognition_pipeline(
     age_preds = []
     for face_obj in extraction_obj:
 
-        age_pred = esteem_age(
-            face_obj["face"], age_model, age_preproc
-        )  # preproc_deepface.preproc_img
+        age_pred = esteem_age(face_obj["face"], age_model, age_preproc)
+
         if not age_raw:
             age_pred = age_postprocess(age_pred)
 

@@ -2,7 +2,7 @@ import tensorflow as tf
 
 
 def limit_gpu_gb(gb: float) -> None:
-    """Sets for all gpus max mem used to gb. Prevents GPU mem overflowing. Used for libs thats consumes >7Gb on <8Gb systems"""
+    """Sets for all gpus max mem used to gb. Prevents GPU mem overflowing. Used for libs thats consumes >7Gb on <8Gb systems e.g. deepface"""
 
     gpus = tf.config.experimental.list_physical_devices("GPU")
 
