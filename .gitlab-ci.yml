@@ -15,7 +15,7 @@ testcov:
   image: python:3.8
   before_script:
     # cv2 fix
-    - sudo apt-get update && apt-get install libgl1 
+    - sudo apt-get update && apt-get install -y libgl1 
     - wget -q https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; bash miniconda.sh -b -f -p $HOME/miniconda;
 # Ensure the (mini) conda environment can be activated.
     - export PATH="$HOME/miniconda/bin:$PATH"
