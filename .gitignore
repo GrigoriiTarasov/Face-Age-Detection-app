@@ -1,3 +1,5 @@
 /data
 /opencv_zoo
-/docker/Anaconda3-2021.11-Linux-x86_64.sh
+**/.ipynb_checkpoints/
+**/__pycache__/
+**/.pytest_cache
