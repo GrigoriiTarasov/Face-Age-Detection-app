@@ -4,7 +4,7 @@
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="license MIT"></a>
   <a href="https://codecov.io/gh/GrigoriiTarasov/
 face_p_age_detection"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
-    <a href="https://codecov.io/gh/GrigoriiTarasov/face_p_age_detection"><img src="https://codecov.io/gh/GrigoriiTarasov/face_p_age_detection/branch/master/graph/badge.svg?token=I1Q253S7TA" alt="Codecov"></a>
+    <a href="https://codecov.io/gl/GrigoriiTarasov/face_p_age_detection"><img src="https://codecov.io/gl/GrigoriiTarasov/face_p_age_detection/branch/master/graph/badge.svg?token=I1Q253S7TA" alt="Codecov"></a>
 </div>
 
 # Age esteemation & Face Detection
@@ -36,13 +36,10 @@ Age backbone: Facenet
 
 1) Create docker image
 
-```cd docker;
-docker build -f Dockerfile -t local/nvidia_conda:face_detection_age .
-```
-
+```bash
 cd docker;
 docker build -f Dockerfile -t local/nvidia_conda:face_detection_age .
-
+```
 
 2) Run from the project folder with desired GPU amount in interactive mode
 
