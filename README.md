@@ -2,7 +2,10 @@
 <div align="center">
   <a href="https://gitlab.com/ml_edu_tarasov/full_projects/face_p_age_detection/pipelines"><img src="https://gitlab.com/ml_edu_tarasov/full_projects/face_p_age_detection/badges/dev/pipeline.svg" alt="build status"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="license MIT"></a>
-  <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
+  <a href="https://codecov.io/gh/GrigoriiTarasov/
+face_p_age_detection"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
+    <a href="https://github.com/psf/black"><img src="https://codecov.io/gh/GrigoriiTarasov/
+face_p_age_detection/branch/master/graph/badge.svg" alt="Codecov"></a>
 </div>
 
 # Age esteemation & Face Detection
@@ -57,6 +60,7 @@ local/nvidia_conda:face_detection_age
 
 ```cd ./home/app; uvicorn app:app --reload --port 2020 --host 0.0.0.0
 ```
+
 Готово.
 
 Swagger UI is available for above settings:
