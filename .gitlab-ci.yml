@@ -20,7 +20,7 @@ testcov:
 # Ensure the (mini) conda environment can be activated.
     - export PATH="$HOME/miniconda/bin:$PATH"
 # (Re)create the environment.yml file for the repository.
-    - conda env create -q -f ./env/face_detection_age_from-history.yaml -n myenv --force
+    - conda env create -q -f ./env/face_detection_age_from-history.yaml -n myenv --yes
     - conda init bash
     - source ~/.bashrc
     - conda activate myenv
