@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.2](https://github.com/codecov/uploader/compare/v0.6.3...v0.7.1) (2023-10-19)
+### Changed
+- Stable version of condaforge is pined to prevent CI timeout
+(reference to issue)
+
 ## [1.1.1](https://github.com/codecov/uploader/compare/v0.6.3...v0.7.1) (2023-10-19)
 ### Changed
 - Compatibility in CI for version of conda above 23.7.0
@@ -32,11 +37,10 @@
 ## [0.4.0](https://github.com/codecov/uploader/compare/v0.6.3...v0.7.1) (2023-10-19)
 ### Added
 - Age models training, evaluation
+- Weights are publically aviable
 
 ## [0.2.0](https://github.com/codecov/uploader/compare/v0.6.3...v0.7.1) (2023-10-19)
 ### Added
 - Data obtain instruction in Readme
 - Labels extraction from CSV file
 - Deepface extract prediction of face from photo and video
-
-

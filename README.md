@@ -34,12 +34,13 @@ Age backbone: Facenet
 
 ### 2.1 App start
 
-1) Create docker image
+1.A) Create docker image
 
 ```bash
-cd docker;
-docker build -f Dockerfile -t local/nvidia_conda:face_detection_age .
+docker build -f ./docker/Dockerfile -t local/nvidia_conda:face_detection_age .
 ```
+1.B) Load custom weights for age module [https://disk.yandex.ru/d/oC-5YQYaHAS-ag](https://disk.yandex.ru/d/oC-5YQYaHAS-ag)
+and place it in ${project_folder}/age_module/weights 
 
 2) Run from the project folder with desired GPU amount in interactive mode
 
@@ -47,8 +48,8 @@ docker build -f Dockerfile -t local/nvidia_conda:face_detection_age .
 
 
 ```bash
-cur_folder=$(realpath ../);
-docker run --gpus all --rm -it  \
+cur_folder=$(realpath ./);
+sudo docker run --gpus all --rm -it  \
 -v $cur_folder:/home \
 -p 8000:2020 \
 local/nvidia_conda:face_detection_age
@@ -57,7 +58,15 @@ local/nvidia_conda:face_detection_age
 3) Стартовать FastAPI
 
 ```bash
-cd ./home/app; uvicorn app:app --reload --port 2020 --host 0.0.0.0
+cd ./home/age_module; uvicorn app.app:app --reload --port 2020 --host 0.0.0.0
+```
+
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:8000/api/predict_photo' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=./age_module/tests/data/116_1_0_20170120134921760.jpg.chip.jpg;type=image/jpeg'
 ```
 
 Готово.

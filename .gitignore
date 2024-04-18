@@ -1,5 +1,7 @@
 /data
+/tmp
 /opencv_zoo
+/age_module/weights
 **/.ipynb_checkpoints/
 **/__pycache__/
 **/.pytest_cache
