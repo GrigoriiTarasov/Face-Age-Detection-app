@@ -27,8 +27,13 @@ predictor = PipelinePredictor()
 
 def predict_one_frame(frame: np.array, predictor: PipelinePredictor) -> List[Dict]:
 
-    preds = predictor.predict_img(frame)
-    client_output = [AdaptPredAPI(*pred).client_output() for pred in preds]
+    extraction_obj, age_preds = predictor.predict_img(frame)
+
+    client_output = []
+    for face_obj, age_pred in zip(extraction_obj, age_preds):
+        # Assuming age_pred is a numpy array with one element, extract that element
+        age = age_pred
+        client_output.append(AdaptPredAPI(face_obj, age).client_output())
 
     return client_output
 
