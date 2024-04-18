@@ -1,23 +1,18 @@
 # --------- Def base image
-FROM nvidia/cuda:11.3.0-base-ubuntu18.04
-
+FROM nvidia/cuda:11.3.1-base-ubuntu18.04
 
 # --------- My consts
 ARG ENVIRONMENT_NAME="face_detection_age"
 
+ARG MINICONDA_VERSION="py38_23.11.0-1"
+ARG MINICONDA_FILENAME="Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh"
+ARG YAML_original_PATH="./env/${ENVIRONMENT_NAME}_from-history.yaml"
 
-# all the resources must be copied into the directory where you run the docker build 
-ARG ANACONDA_SOURCE_PATH="Anaconda3-2021.11-Linux-x86_64.sh"
-
-ARG YAML_original_PATH="./env_files/${ENVIRONMENT_NAME}_from-history.yaml"
-# --------- Copy env file to image 
+# --------- Copy env file to image
 ENV env_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
 
-#ARG ANACONDA_FILEPATH=Anaconda3-2021.11-Linux-x86_64.sh
-
-ENV ANACONDA_COPIED_NAME=${ANACONDA_SOURCE_PATH} 
-#Anaconda3-2021.11-Linux-x86_64.sh
-ENV ANAC_DOCKER_FILE=/tmp/${ANACONDA_COPIED_NAME}
+ENV MINICONDA_COPIED_NAME=${MINICONDA_FILENAME}
+ENV MINICONDA_DOCKER_FILEPATH=/tmp/${MINICONDA_COPIED_NAME}
 
 # Install prerequisites
 RUN apt-get update ; apt-get install -y \
@@ -29,54 +24,34 @@ RUN apt-get update ; apt-get install -y \
     libx11-6 \
  && rm -rf /var/lib/apt/lists/*
 
-# https://github.com/NVIDIA/nvidia-docker/issues/1632#issuecomment-1112667716
-RUN rm /etc/apt/sources.list.d/cuda.list
-#RUN rm /etc/apt/sources.list.d/nvidia-ml.list
-
 # for cv2 pre's docker exclusive
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libgl1 \
         libglib2.0-0
-# X RUN pip3 install opencv-python-headless==4.5.3.56        
-# X RUN apt install -y libgl1-mesa-glx
-# X RUN apt-get install libgl1
-# https://stackoverflow.com/a/70509199/7607734
 
-# --------- Install conda to image
-
-
-
-
-# ----------Copy from sysytem to container
-
+# --------- Copy from system to container
 ADD ${YAML_original_PATH} /src/environment.yaml
+ADD ./dependencies/deepface-50105b21e6bd2c5d490483558b78a92701539752.zip /src/dependencies/
 
+# Update environment.yaml
+RUN sed -i 's|../dependencies/deepface-50105b21e6bd2c5d490483558b78a92701539752.zip|/src/dependencies/deepface-50105b21e6bd2c5d490483558b78a92701539752.zip|g' /src/environment.yaml
 
-# --------- Load and install conda
+# --------- Load and install Miniconda
+ENV MINICONDA_PATH=/opt/miniconda/
 
-ENV CONDA_PATH=/opt/conda/
-# Better to store on local PC and just add, possibly it will be cached and faster to rebuild
-#RUN cd /tmp && curl -O https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh
-ADD ${ANACONDA_SOURCE_PATH} ${ANAC_DOCKER_FILE}
-RUN chmod +x ${ANAC_DOCKER_FILE}
+# Download Miniconda installer
+RUN cd ./tmp && curl -L -O https://repo.continuum.io/miniconda/${MINICONDA_FILENAME}
+
+RUN chmod +x ${MINICONDA_DOCKER_FILEPATH}
 RUN mkdir /root/.conda
-RUN bash -c "${ANAC_DOCKER_FILE} -b -p ${CONDA_PATH}"
-
+RUN bash -c "${MINICONDA_DOCKER_FILEPATH} -b -f -p ${MINICONDA_PATH}"
 
 # Initializes Conda for bash shell interaction.
-RUN ${CONDA_PATH}/bin/conda init bash
+RUN ${MINICONDA_PATH}/bin/conda init bash
 
-
-# --------- USE ENV 
-RUN export PATH="/opt/conda/envs/${ENVIRONMENT_NAME}/bin:$PATH"
-
-RUN ${CONDA_PATH}/bin/conda install -n base -c conda-forge mamba
-RUN ${CONDA_PATH}/bin/mamba env create -f /src/environment.yaml
-
+# --------- Create and activate the environment
+RUN ${MINICONDA_PATH}/bin/conda env create -q -f /src/environment.yaml -n ${ENVIRONMENT_NAME} --yes
+RUN export PATH="${MINICONDA_PATH}/envs/${ENVIRONMENT_NAME}/bin:$PATH"
 RUN echo conda activate ${ENVIRONMENT_NAME} >> /root/.bashrc
 
-
 RUN rm -rf /tmp/*
-
-
-
