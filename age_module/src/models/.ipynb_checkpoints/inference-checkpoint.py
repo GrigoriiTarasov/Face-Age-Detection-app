@@ -114,7 +114,16 @@ def esteem_age(img_batch, age_model: tf.keras.Model, preproc_f) -> float:
 def age_postprocess(age_pred: Union[Type[np.ndarray], float, list], max_age=116) -> int:
     """Prediction to base units (int) and not to extropolate"""
     predicted_age = np.clip(np.round(age_pred * max_age), 1, max_age)
-    predicted_age = int(predicted_age)
+
+    type_handling = {
+        float: lambda x: int(x),
+        int: lambda x: x,
+        list: lambda x: [int(val) for val in x],
+        np.ndarray: lambda x: x.astype(int),
+        np.float64: lambda x: int(x),
+    }
+
+    predicted_age = type_handling[type(predicted_age)](predicted_age)
 
     return predicted_age
 
