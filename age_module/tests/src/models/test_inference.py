@@ -1,7 +1,7 @@
 import numpy as np
 from typing import Union, Type, List, Dict
 
-from age_module.src.models.inference import extract_face
+from age_module.src.models.inference import extract_face, age_postprocess
 
 
 def test_extract_face():
@@ -29,3 +29,14 @@ def test_extract_face():
         isinstance(face["face"], np.ndarray) for face in result
     )  # Ensure "face" value is a numpy array
     # Add more assertions based on the expected output structure and behavior of the function
+
+
+def test_age_postprocess():
+    # Mock input data
+    ages_out = [-1, 500]
+    max_age_out = 116
+    results_of_out = age_postprocess(ages_out, max_age=max_age_out)
+    assert all(results_of_out <= max_age_out)
+
+    age_fractional = 0.3
+    assert type(age_postprocess(age_fractional)) is int
