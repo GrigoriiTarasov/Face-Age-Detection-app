@@ -16,7 +16,7 @@ testcov:
   before_script:
     # cv2 fix
     - apt-get update && apt-get install -y libgl1 
-    - wget -q https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; bash miniconda.sh -b -f -p $HOME/miniconda;
+    - wget -q https://repo.continuum.io/miniconda/Miniconda3-py38_23.11.0-1-Linux-x86_64.sh -O miniconda.sh; bash miniconda.sh -b -f -p $HOME/miniconda;
 # Ensure the (mini) conda environment can be activated.
     - export PATH="$HOME/miniconda/bin:$PATH"
 # (Re)create the environment.yml file for the repository.
