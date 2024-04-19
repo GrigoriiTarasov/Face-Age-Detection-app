@@ -76,10 +76,6 @@ def extract_face(
     return face_obj
 
 
-def get_params_of_model(configs_path):
-    pass
-
-
 class PipelinePredictor:
     """Loads weights and archs using yaml
     default is best
