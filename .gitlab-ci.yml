@@ -31,7 +31,7 @@ testcov:
     - pytest . --cov --disable-pytest-warnings
     ## Download codecov
     # https://docs.codecov.com/docs/codecov-uploader#download-as-a-binary
-    - curl -Os https://cli.codecov.io/latest/linux/codecov
+    - curl -Os https://cli.codecov.io/linux/v0.5.1 #https://cli.codecov.io/latest/linux/codecov
     # Install codecov
     - chmod +x codecov
     # Upload to site
