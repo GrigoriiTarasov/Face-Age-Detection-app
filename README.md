@@ -19,16 +19,19 @@ Date of creation: 7 September 2023
 
 #### App:
 Docs API: Swagger
+
 UI: not ment
 
 #### ML models and frameroks
 Extraction framework: Deepface
+
 Selected extraction backend: mtcnn
 
+
 Age dataset: UTKFace_Dataset cropped
+
 Age backbone: Facenet
 
-Сервис на FasatAPI с возможностью развёртывания в докер реализующий API извлечения лиц из картинок и видео и оценки их возраста. Класс с пайпланом такого распознавания с имплементацией обёртки над моделями из deepface и скрипты оценок кастомных моделей над несколькими представленными датасетами (, FDDB)
 
 ## 2. Instructions
 
@@ -44,9 +47,6 @@ and place it in ${project_folder}/age_module/weights
 
 2) Run from the project folder with desired GPU amount in interactive mode
 
-  Запустить из папки проекта с нужным кол-вом видеокарт в интерактивном режиме
-
-
 ```bash
 cur_folder=$(realpath ./);
 sudo docker run --gpus all --rm -it  \
@@ -61,10 +61,11 @@ local/nvidia_conda:face_detection_age
 cd ./home/age_module; uvicorn app.app:app --reload --port 2020 --host 0.0.0.0
 ```
 
+Done. The app is ready to operate now.
 
-Готово.
 
 Swagger UI is available for above settings:
+
 [http://127.0.0.1:8000/docs#/](http://127.0.0.1:8000/docs#/)
 
 Optional: try on example image
@@ -81,6 +82,6 @@ curl -X 'POST' \
  
 Age training was data can be obtained from [https://susanqq.github.io/UTKFace/](https://susanqq.github.io/UTKFace/)
 
-# Further improvments
+# 3 Further possible improvments
 
 Balance load 
