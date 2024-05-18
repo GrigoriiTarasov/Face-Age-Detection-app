@@ -1,6 +1,6 @@
 
 <div align="center">
-  <a href="https://gitlab.com/ml_edu_tarasov/full_projects/face_p_age_detection/pipelines"><img src="https://gitlab.com/ml_edu_tarasov/full_projects/face_p_age_detection/badges/dev/pipeline.svg" alt="build status"></a>
+  <a href="https://gitlab.com/GrigoriiTarasov/ci-for-github-face-age-detection-app/pipelines"><img src="https://gitlab.com/GrigoriiTarasov/ci-for-github-face-age-detection-app/badges/dev/pipeline.svg" alt="build status"></a>
   <a href="https://codecov.io/gl/GrigoriiTarasov/face_p_age_detection" >
 <img src="https://codecov.io/gl/GrigoriiTarasov/face_p_age_detection/graph/badge.svg?token=I1Q253S7TA" alt="Codecov"/></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="license MIT"></a>
