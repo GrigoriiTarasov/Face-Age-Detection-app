@@ -1,8 +1,8 @@
 
 <div align="center">
-  <a href="https://gitlab.com/GrigoriiTarasov/ci-for-github-face-age-detection-app/pipelines"><img src="https://gitlab.com/GrigoriiTarasov/ci-for-github-face-age-detection-app/badges/dev/pipeline.svg" alt="build status"></a>
-  <a href="https://codecov.io/gl/GrigoriiTarasov/face_p_age_detection" >
-<img src="https://codecov.io/gl/GrigoriiTarasov/face_p_age_detection/graph/badge.svg?token=I1Q253S7TA" alt="Codecov"/></a>
+  <a href="https://gitlab.com/GrigoriiTarasov/Face-Age-Detection-app/pipelines"><img src="https://gitlab.com/GrigoriiTarasov/Face-Age-Detection-app/badges/dev/pipeline.svg" alt="build status"></a>
+  <a href="https://codecov.io/gl/GrigoriiTarasov/Face-Age-Detection-app" >
+<img src="https://codecov.io/gl/GrigoriiTarasov/Face-Age-Detection-app/graph/badge.svg?token=I1Q253S7TA" alt="Codecov"/></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="license MIT"></a>
   <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
 </div>
@@ -18,19 +18,21 @@ The aim of the project is to provide service runed in Docker with API FastAPI in
 Date of creation: 7 September 2023
 
 #### App:
-Docs API: Swagger
 
-UI: not ment
+| Component | Details |
+| -- | -- |
+|Docs API | Swagger | 
+| UI | is out of task | 
 
 #### ML models and frameroks
-Extraction framework: Deepface
 
-Selected extraction backend: mtcnn
-
-
-Age dataset: UTKFace_Dataset cropped
-
-Age backbone: Facenet
+| Component | Details |
+| -- | -- |
+|Extraction framework | Deepface | 
+| Selected extraction backend | mtcnn | 
+| Age model | custom | 
+| Age backbone | Facenet |
+| Age dataset | UTKFace_Dataset cropped |
 
 
 ## 2. Instructions
