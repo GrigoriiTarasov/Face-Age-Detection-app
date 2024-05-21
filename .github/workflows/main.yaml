@@ -1,0 +1,44 @@
+name: Python application
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container: python:3.8
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install black
+      run: pip install black
+    - name: Run black
+      run: black --check .
+
+  testcov:
+    runs-on: ubuntu-latest
+    container: python:3.8
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        apt-get update && apt-get install -y libgl1
+        wget -q https://repo.continuum.io/miniconda/Miniconda3-py38_23.11.0-1-Linux-x86_64.sh -O miniconda.sh
+        bash miniconda.sh -b -f -p $HOME/miniconda
+        export PATH="$HOME/miniconda/bin:$PATH"
+        conda env create -q -f ./env/face_detection_age_from-history.yaml -n myenv --yes
+        conda init bash
+        source ~/.bashrc
+        conda activate myenv
+        pip install pytest pytest-cov
+    - name: Run pytest-cov
+      run: pytest . --cov --disable-pytest-warnings
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+
