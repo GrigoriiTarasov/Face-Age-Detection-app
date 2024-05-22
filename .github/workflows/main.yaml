@@ -38,6 +38,7 @@ jobs:
         apt-get update && apt-get install -y libgl1
         pip install pytest pytest-cov
     - name: Run pytest-cov
+      shell: bash -l {0}
       run: pytest . --cov --disable-pytest-warnings
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4.0.1
