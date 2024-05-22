@@ -23,17 +23,17 @@ jobs:
     container: python:3.8
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        use-only-tar-bz2: true 
+        auto-update-conda: true
+        activate-environment: myenv
+        environment-file: ./env/face_detection_age_from-history.yaml
+        auto-activate-base: false    
     - name: Install dependencies
       shell: bash -l {0}
       run: |
         apt-get update && apt-get install -y libgl1
-        wget -q https://repo.continuum.io/miniconda/Miniconda3-py38_23.11.0-1-Linux-x86_64.sh -O miniconda.sh
-        bash miniconda.sh -b -f -p $HOME/miniconda
-        export PATH="$HOME/miniconda/bin:$PATH"
-        conda env create -q -f ./env/face_detection_age_from-history.yaml -n myenv --yes
-        conda init bash
-        echo "conda activate myenv" >> $GITHUB_ENV
         pip install pytest pytest-cov
     - name: Run pytest-cov
       run: pytest . --cov --disable-pytest-warnings
