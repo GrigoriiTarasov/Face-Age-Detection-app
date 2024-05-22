@@ -1,8 +1,6 @@
 
-<div align="center">
-  <a href="https://gitlab.com/GrigoriiTarasov/Face-Age-Detection-app/pipelines"><img src="https://gitlab.com/GrigoriiTarasov/Face-Age-Detection-app/badges/dev/pipeline.svg" alt="build status"></a>
-  <a href="https://codecov.io/gl/GrigoriiTarasov/Face-Age-Detection-app" >
-<img src="https://codecov.io/gl/GrigoriiTarasov/Face-Age-Detection-app/graph/badge.svg?token=I1Q253S7TA" alt="Codecov"/></a>
+[![CI](https://github.com/GrigoriiTarasov/Face-Age-Detection-app/actions/workflows/main.yaml/badge.svg)](https://github.com/GrigoriiTarasov/Face-Age-Detection-app/actions/workflows/main.yaml)
+[![codecov](https://codecov.io/gh/GrigoriiTarasov/Face-Age-Detection-app/graph/badge.svg?token=SPGFF2U7MP)](https://codecov.io/gh/GrigoriiTarasov/Face-Age-Detection-app)
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="license MIT"></a>
   <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
 </div>
