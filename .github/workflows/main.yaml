@@ -39,9 +39,10 @@ jobs:
         pip install pytest pytest-cov
     - name: Run pytest-cov
       shell: bash -l {0}
-      run: pytest . --cov --disable-pytest-warnings
+      run: pytest . --cov --cov-report=xml --disable-pytest-warnings
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4.0.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        file: coverage.xml 
 
