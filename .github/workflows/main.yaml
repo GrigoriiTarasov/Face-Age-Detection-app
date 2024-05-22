@@ -41,7 +41,7 @@ jobs:
       shell: bash -l {0}
       run: pytest . --cov --cov-report=xml --disable-pytest-warnings
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4.0.1
+      uses: codecov/codecov-action@v4.1.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: coverage.xml 
