@@ -5,3 +5,4 @@
 **/.ipynb_checkpoints/
 **/__pycache__/
 **/.pytest_cache
+/utkface_aligned_cropped
