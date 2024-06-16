@@ -32,7 +32,7 @@ def predict_one_frame(frame: np.array, predictor: PipelinePredictor) -> List[Dic
     client_output = []
     for face_obj, age_pred in zip(extraction_obj, age_preds):
         # Assuming age_pred is a numpy array with one element, extract that element
-        age = age_pred
+        age = age_pred.item()
         client_output.append(AdaptPredAPI(face_obj, age).client_output())
 
     return client_output
