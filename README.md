@@ -80,7 +80,7 @@ curl -X 'POST' \
 
 ## 2.2 Reproducing and fine tuning on custom datasets
  
-Age training was data can be obtained from [https://susanqq.github.io/UTKFace/](https://susanqq.github.io/UTKFace/)
+Age training dataset "UTKFace Cropped" migrated to [www.kaggle.com/datasets/abhikjha/utk-face-cropped](https://www.kaggle.com/datasets/abhikjha/utk-face-cropped)
 
 # 3 Further possible improvments
 
