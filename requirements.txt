@@ -17,7 +17,11 @@ matplotlib
 retina-face
 dlib==19.24.2
 scikit-learn
+scipy>=1.10
 python-multipart
 pre-commit
+mlflow
+optuna
+dvc
 protobuf==3.20.*
 ./dependencies/deepface-50105b21e6bd2c5d490483558b78a92701539752.zip
