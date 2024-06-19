@@ -21,10 +21,14 @@ dependencies:
   - matplotlib
   - retina-face
   - dlib
-  - scikit-learn
+  - scikit-learn>=1.2.2
+  - scipy>=1.10
   - python-multipart
   - pip
   - pre-commit
+  - mlflow
+  - optuna
+  - dvc
   - pip:
     - ../dependencies/deepface-50105b21e6bd2c5d490483558b78a92701539752.zip
   
